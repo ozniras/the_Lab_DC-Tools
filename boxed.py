@@ -104,6 +104,3 @@ def upload_box_file(client=None, folder_id=None, file_name=''):
     return None
 
     
-client = start_box_connection(credentials_file='./credentials.json')
-download_box_file(client=client, file_id='942204689174', destination='./local2.docx')
-upload_box_file(client=client, folder_id='132850993426', file_name='./local.docx')
