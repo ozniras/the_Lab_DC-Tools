@@ -77,7 +77,14 @@ def start_box_connection(credentials_file=''):
     
     return Client(auth)
     
+def ls_box_folder(client=None, folder_id=''):
+    '''ls for box'''
+    items = client.folder(folder_id=folder_id).get_items()
+    for item in items:
+        print(f'{item.type}: {item.name}, id: {item.id}')
+    return client.folder(folder_id=folder_id).get_items()
 
+    
 def download_box_file(client=None, file_id='', destination=''):
     '''Downloads a box file and saves it locally
     Inputs:
@@ -100,7 +107,14 @@ def upload_box_file(client=None, folder_id=None, file_name=''):
     Outputs:
     - You should see the file uploaded to the box account 
     '''
-    new_file = client.folder(folder_id).upload(file_name)
+    # Exception: in case file already exists, overwrite
+    try:
+        new_file = client.folder(folder_id).upload(file_name)
+    except Exception as e:
+        update_file = client.file(e.context_info['conflicts']['id']).update_contents(file_name)
     return None
 
     
+#client = start_box_connection(credentials_file='./credentials.json')
+#download_box_file(client=client, file_id='942204689174', destination='./local2.docx')
+#upload_box_file(client=client, folder_id='132850993426', file_name='./local.docx')
